@@ -10,6 +10,7 @@ from custom_components.goldair_climate.const import (
     API_PROTOCOL_VERSIONS,
     CONF_TYPE_DEHUMIDIFIER,
     CONF_TYPE_FAN,
+    CONF_TYPE_GCT315_HEATER,
     CONF_TYPE_GECO_HEATER,
     CONF_TYPE_GPCV_HEATER,
     CONF_TYPE_GPPH_HEATER,
@@ -19,6 +20,7 @@ from custom_components.goldair_climate.device import GoldairTuyaDevice
 from .const import (
     DEHUMIDIFIER_PAYLOAD,
     FAN_PAYLOAD,
+    GCT315_HEATER_PAYLOAD,
     GECO_HEATER_PAYLOAD,
     GPCV_HEATER_PAYLOAD,
     GPPH_HEATER_PAYLOAD,
@@ -102,6 +104,14 @@ class TestDevice(IsolatedAsyncioTestCase):
     async def test_detects_fan_payload(self):
         self.subject._cached_state = FAN_PAYLOAD
         self.assertEqual(await self.subject.async_inferred_type(), CONF_TYPE_FAN)
+
+    async def test_detects_gct315_heater_payload(self):
+        # This payload also contains "8", which would otherwise be claimed by
+        # the fan check further down.
+        self.subject._cached_state = GCT315_HEATER_PAYLOAD
+        self.assertEqual(
+            await self.subject.async_inferred_type(), CONF_TYPE_GCT315_HEATER
+        )
 
     async def test_detection_returns_none_when_device_type_could_not_be_detected(self):
         self.subject._cached_state = {"1": False}
