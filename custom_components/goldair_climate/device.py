@@ -14,6 +14,7 @@ from .const import (
     API_PROTOCOL_VERSIONS,
     CONF_TYPE_DEHUMIDIFIER,
     CONF_TYPE_FAN,
+    CONF_TYPE_GCT315_HEATER,
     CONF_TYPE_GECO_HEATER,
     CONF_TYPE_GPCV_HEATER,
     CONF_TYPE_GPPH_HEATER,
@@ -88,6 +89,10 @@ class GoldairTuyaDevice(object):
         _LOGGER.debug(f"Inferring device type from cached state: {cached_state}")
         if "5" in cached_state and "3" not in cached_state:
             return CONF_TYPE_DEHUMIDIFIER
+        # Must precede the fan check: the GCT315 also reports "8" (oscillation).
+        # "19" (its auto-off countdown) is the only dps unique to this layout.
+        if "19" in cached_state:
+            return CONF_TYPE_GCT315_HEATER
         if "8" in cached_state:
             return CONF_TYPE_FAN
         if "106" in cached_state:
