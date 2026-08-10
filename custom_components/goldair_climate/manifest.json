@@ -1,10 +1,12 @@
 {
   "domain": "goldair_climate",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "name": "Goldair WiFi climate devices",
   "documentation": "https://github.com/nikrolls/homeassistant-goldair-climate",
+  "issue_tracker": "https://github.com/nikrolls/homeassistant-goldair-climate/issues",
   "dependencies": [],
   "codeowners": ["@nikrolls"],
-  "requirements": ["pycryptodome~=3.9","pytuya~=7.0.5"],
+  "requirements": ["tinytuya~=1.20"],
+  "iot_class": "local_polling",
   "config_flow": true
 }
